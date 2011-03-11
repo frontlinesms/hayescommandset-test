@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!--
+  	Copyright the author.  Released under GNU AGPL v3 or newer.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.frontlinesms.test</groupId>
+	<artifactId>hayescommandset-test</artifactId>
+	<version>0.0.1</version>
+	<name>Hayes Command Set serial test library</name>
+	<description>Library for testing applications using the Hayes (AT) command set to communicate with modems over serial connections.</description>
+	
+	<repositories>
+		<repository>
+			<id>dev.frontlinesms.repo</id>
+			<name>FrontlineSMS repository</name>
+			<url>http://dev.frontlinesms.com/m2repo</url>
+		</repository>
+	</repositories>
+  
+	<properties>
+		<!-- Force Maven to use UTF-8 encoding when copying resources, rather than using the 
+			platform default. -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>-enableassertions</argLine>
+					<forkMode>always</forkMode>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>net.frontlinesms.DesktopLauncher</mainClass>
+							<packageName>net.frontlinesms</packageName>
+						</manifest>
+						<manifestEntries>
+							<version>${project.version}</version>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+		
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-beta-6</version>
+			</extension>
+		</extensions>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<xmlOutput>true</xmlOutput>
+					<findbugsXmlOutput>true</findbugsXmlOutput>
+					<findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+	
+	<dependencies>
+		<dependency>
+			<groupId>net.frontlinesms.test</groupId>
+			<artifactId>serial-test</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>
