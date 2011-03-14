@@ -10,6 +10,11 @@
 	<name>Hayes Command Set serial test library</name>
 	<description>Library for testing applications using the Hayes (AT) command set to communicate with modems over serial connections.</description>
 	
+	<scm>
+		<connection>scm:git://github.com/${github.projectOwner}/${github.projectName}.git</connection>
+		<developerConnection>scm:git:git@github.com:${github.projectOwner}/${github.projectName}.git</developerConnection>
+	</scm>
+	
 	<repositories>
 		<repository>
 			<id>frontlinesms.repo</id>
