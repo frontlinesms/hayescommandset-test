@@ -6,22 +6,33 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.frontlinesms.test</groupId>
 	<artifactId>hayescommandset-test</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>Hayes Command Set serial test library</name>
 	<description>Library for testing applications using the Hayes (AT) command set to communicate with modems over serial connections.</description>
 	
 	<repositories>
 		<repository>
-			<id>dev.frontlinesms.repo</id>
+			<id>frontlinesms.repo</id>
 			<name>FrontlineSMS repository</name>
 			<url>http://dev.frontlinesms.com/m2repo</url>
 		</repository>
 	</repositories>
+	
+	<distributionManagement>
+		<repository>
+			<id>frontlinesms.repo</id>
+			<name>FrontlineSMS repository</name>
+			<url>ftp://dev.frontlinesms.com</url>
+		</repository>
+	</distributionManagement>
   
 	<properties>
 		<!-- Force Maven to use UTF-8 encoding when copying resources, rather than using the 
 			platform default. -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<github.projectName>hayescommandset-test</github.projectName>
+		<github.projectOwner>frontlinesms</github.projectOwner>
 	</properties>
 	
 	<build>

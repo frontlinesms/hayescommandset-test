@@ -1,4 +1,4 @@
-package serial.mock;
+package net.frontlinesms.test.serial;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+
+import serial.mock.SerialPortHandler;
 
 /**
  * Simple Serial Port emulator for Hayes AT command set.  You must program the command
