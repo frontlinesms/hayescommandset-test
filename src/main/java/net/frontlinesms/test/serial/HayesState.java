@@ -18,7 +18,7 @@ public class HayesState {
 		} else return errorResponse;
 	}
 
-	static HayesState createState(Object errorResponse, Object... requestResponses) {
+	public static HayesState createState(Object errorResponse, Object... requestResponses) {
 		HashMap<String, HayesResponse> responseMap = new HashMap<String, HayesResponse>();
 		assert (requestResponses.length % 2) == 0;
 		for (int i = 0; i < requestResponses.length; i+=2) {
