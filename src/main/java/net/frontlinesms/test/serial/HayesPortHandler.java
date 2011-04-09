@@ -1,14 +1,7 @@
 package net.frontlinesms.test.serial;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
-
-import serial.mock.SerialPortHandler;
 
 /**
  * Simple Serial Port emulator for Hayes AT command set.  You must program the command
@@ -16,10 +9,8 @@ import serial.mock.SerialPortHandler;
  * @author aga
  *
  */
-public class HayesPortHandler implements SerialPortHandler {
+public class HayesPortHandler extends BaseHayesPortHandler {
 	private final Map<String, String> requestAndResponseMap = new HashMap<String, String>();
-	private final Queue<Character> responseQueue = new LinkedList<Character>(); 
-	private final StringBuilder currentRequest = new StringBuilder();
 	private final String unknownResponse;
 	
 	public HayesPortHandler(String unknownResponse, String... requestsAndResponses) {
@@ -34,61 +25,17 @@ public class HayesPortHandler implements SerialPortHandler {
 			assert(replaced != null);
 		}
 
+		assert unknownResponse != null;
 		this.unknownResponse = unknownResponse;
 	}
 
-	public InputStream getInputStream() {
-		return new InputStream() {
-			@Override
-			public int read() throws IOException {
-				Character c = responseQueue.poll();
-				if(c != null) return c;
-				else return -1;
-			}
-			@Override
-			public int available() throws IOException {
-				return responseQueue.size();
-			}
-		};
-	}
-
-	public OutputStream getOutputStream() {
-		return new OutputStream() {
-			@Override
-			public void write(int b) throws IOException {
-				if(notLineEnd(b)) {
-					currentRequest.append((char) b);
-				} else {
-					submitCurrentRequest();
-				}
-			}
-		};
-	}
-	
-	private boolean notLineEnd(int b) {
-		return b != '\n' && b != '\r';
-	}
-
-	private void submitCurrentRequest() {
-		if(currentRequest.length() > 0) {
-			String request = currentRequest.toString();
-			String response = requestAndResponseMap.get(request);
-			if(response != null) {
-				addResponse(response);
-			} else if(unknownResponse != null) {
-				addResponse(unknownResponse);
-			}
-			System.out.println("RECEIVED COMPLETE REQUEST: " + currentRequest.toString());
-			currentRequest.delete(0, Integer.MAX_VALUE);
+	@Override
+	protected String getResponseText(String request) {
+		String response = requestAndResponseMap.get(request);			
+		if(response != null) {
+			return response;
+		} else {
+			return unknownResponse;
 		}
-	}
-	
-	private void addResponse(String response) {
-		this.responseQueue.add('\r');
-		for(char c : response.toCharArray()) {
-			this.responseQueue.add(c);
-		}
-		System.out.println("APPENDED RESPONSE: " + response);
-		this.responseQueue.add('\r');
 	}
 }
