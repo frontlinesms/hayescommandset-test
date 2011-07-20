@@ -17,8 +17,7 @@ abstract class BaseHayesPortHandler implements SerialPortHandler {
 			@Override
 			public int read() throws IOException {
 				Character c = responseQueue.poll();
-				if(c != null) return c;
-				else return -1;
+				return c!=null? c: -1;
 			}
 			@Override
 			public int available() throws IOException {
@@ -64,6 +63,7 @@ abstract class BaseHayesPortHandler implements SerialPortHandler {
 	}
 	
 	private boolean notLineEnd(int b) {
-		return b != '\n' && b != '\r';
+		// 0x1A is EOF or Ctrl-Z.  Hopefully you recognise the other characters.
+		return b!='\n' && b!='\r' && b!=0x1A;
 	}
 }

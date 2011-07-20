@@ -1,5 +1,7 @@
 package net.frontlinesms.test.serial.hayes;
 
+import java.util.regex.Pattern;
+
 public class HayesState {
 	private final HayesResponse errorResponse;
 	private final RegexTable<HayesResponse> responses;
@@ -17,7 +19,15 @@ public class HayesState {
 		this.responses.put(request, new HayesResponse(response));
 	}
 	
+	public void setResponse(Pattern request, String response) {
+		this.responses.put(request, new HayesResponse(response));
+	}
+	
 	public void setResponse(String request, String response, HayesState newState) {
+		this.responses.put(request, new HayesResponse(response, newState));
+	}
+	
+	public void setResponse(Pattern request, String response, HayesState newState) {
 		this.responses.put(request, new HayesResponse(response, newState));
 	}
 

@@ -9,6 +9,9 @@ class RegexTable<T> {
 	private final Map<Object, T> map = new LinkedHashMap<Object, T>();
 	
 	public T put(Object key, T value) {
+		if(!(key instanceof String || key instanceof Pattern)) {
+			throw new IllegalArgumentException("Must provide String or Pattern for table lookup.");
+		}
 		return map.put(key, value);
 	}
 	
