@@ -1,7 +1,9 @@
 package net.frontlinesms.test.serial;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 /**
  * Simple Serial Port emulator for Hayes AT command set.  You must program the command
@@ -10,19 +12,19 @@ import java.util.Map;
  *
  */
 public class HayesPortHandler extends BaseHayesPortHandler {
-	private final Map<String, String> requestAndResponseMap = new HashMap<String, String>();
+	private final Map<Object, String> requestAndResponseTable = new LinkedHashMap<Object, String>();
 	private final String unknownResponse;
 	
-	public HayesPortHandler(String unknownResponse, String... requestsAndResponses) {
+	public HayesPortHandler(String unknownResponse, Object... requestsAndResponses) {
 		assert(requestsAndResponses.length % 1 == 0): "Must have an even number of requests and responses.";
 		for (int i = 0; i < requestsAndResponses.length; i+=2) {
-			String request = requestsAndResponses[i];
+			Object request = requestsAndResponses[i];
 			assert(request != null);
-			String response = requestsAndResponses[i+1];
+			String response = (String) requestsAndResponses[i+1];
 			assert(response != null);
 			
-			String replaced = requestAndResponseMap.put(request, response);
-			assert(replaced != null);
+			String replaced = requestAndResponseTable.put(request, response);
+			assert(replaced == null);
 		}
 
 		assert unknownResponse != null;
@@ -31,11 +33,13 @@ public class HayesPortHandler extends BaseHayesPortHandler {
 
 	@Override
 	protected String getResponseText(String request) {
-		String response = requestAndResponseMap.get(request);			
-		if(response != null) {
-			return response;
-		} else {
-			return unknownResponse;
+		for(Entry<Object, String> e : requestAndResponseTable.entrySet()) {
+			Object k = e.getKey();
+			if((k instanceof String && k.equals(request)) ||
+					(k instanceof Pattern && ((Pattern) k).matcher(request).matches())) {
+				return e.getValue();
+			} 
 		}
+		return unknownResponse;
 	}
 }
