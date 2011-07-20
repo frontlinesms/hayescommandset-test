@@ -16,4 +16,12 @@ public class StatefulHayesPortHandlerTest extends BaseTestCase {
 	public void testRegexRequestMatching() {
 		fail("No tests written yet.");
 	}
+	
+	public void testStandardRequestMatchingWithStateChange() {
+		fail("No tests written yet.");
+	}
+	
+	public void testRegexRequestMatchingWithStateChange() {
+		fail("No tests written yet.");
+	}
 }
