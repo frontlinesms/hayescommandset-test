@@ -18,4 +18,8 @@ public class StatefulHayesPortHandler extends BaseHayesPortHandler {
 		
 		return response.getTextResponse();
 	}
+
+	public Object getCurrentState() {
+		return currentState;
+	}
 }

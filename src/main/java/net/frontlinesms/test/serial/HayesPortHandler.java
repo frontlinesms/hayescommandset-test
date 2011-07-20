@@ -1,10 +1,5 @@
 package net.frontlinesms.test.serial;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Pattern;
-
 /**
  * Simple Serial Port emulator for Hayes AT command set.  You must program the command
  * responses yourself, but standard line endings and openings will be appended for you.
@@ -12,7 +7,7 @@ import java.util.regex.Pattern;
  *
  */
 public class HayesPortHandler extends BaseHayesPortHandler {
-	private final Map<Object, String> requestAndResponseTable = new LinkedHashMap<Object, String>();
+	private RegexTable<String> requestAndResponseTable = new RegexTable<String>();
 	private final String unknownResponse;
 	
 	public HayesPortHandler(String unknownResponse, Object... requestsAndResponses) {
@@ -33,13 +28,6 @@ public class HayesPortHandler extends BaseHayesPortHandler {
 
 	@Override
 	protected String getResponseText(String request) {
-		for(Entry<Object, String> e : requestAndResponseTable.entrySet()) {
-			Object k = e.getKey();
-			if((k instanceof String && k.equals(request)) ||
-					(k instanceof Pattern && ((Pattern) k).matcher(request).matches())) {
-				return e.getValue();
-			} 
-		}
-		return unknownResponse;
+		return requestAndResponseTable.get(request, unknownResponse);
 	}
 }

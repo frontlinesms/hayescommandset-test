@@ -1,28 +1,31 @@
 package net.frontlinesms.test.serial;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class HayesState {
 	private final HayesResponse errorResponse;
-	private final Map<String, HayesResponse> responses;
+	private final RegexTable<HayesResponse> responses;
 	
-	private HayesState(HayesResponse errorResponse, Map<String, HayesResponse> responses) {
+	private HayesState(HayesResponse errorResponse, RegexTable<HayesResponse> responses) {
 		this.errorResponse = errorResponse;
 		this.responses = responses;
 	}
 
 	public HayesResponse getResponse(String request) {
-		if(this.responses.containsKey(request)) {
-			return this.responses.get(request);
-		} else return errorResponse;
+		return responses.get(request, errorResponse);
+	}
+	
+	public void setResponse(String request, String response) {
+		this.responses.put(request, new HayesResponse(response));
+	}
+	
+	public void setResponse(String request, String response, HayesState newState) {
+		this.responses.put(request, new HayesResponse(response, newState));
 	}
 
 	public static HayesState createState(Object errorResponse, Object... requestResponses) {
-		HashMap<String, HayesResponse> responseMap = new HashMap<String, HayesResponse>();
+		RegexTable<HayesResponse> responseMap = new RegexTable<HayesResponse>();
 		assert (requestResponses.length % 2) == 0;
 		for (int i = 0; i < requestResponses.length; i+=2) {
-			String request = (String) requestResponses[i];
+			Object request = requestResponses[i];
 			Object suppliedResponse = requestResponses[i + 1];
 			HayesResponse actualResponse;
 			if(suppliedResponse instanceof String) {
@@ -30,6 +33,9 @@ public class HayesState {
 			} else actualResponse = (HayesResponse) suppliedResponse;
 			responseMap.put(request, actualResponse);
 		}
-		return new HayesState(errorResponse instanceof HayesResponse ? (HayesResponse) errorResponse : new HayesResponse((String) errorResponse), responseMap);
+		return new HayesState(
+				errorResponse instanceof HayesResponse ? (HayesResponse) errorResponse 
+						: new HayesResponse((String) errorResponse),
+				responseMap);
 	}
 }
