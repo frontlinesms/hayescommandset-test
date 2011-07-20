@@ -41,11 +41,36 @@ public class StatefulHayesPortHandlerTest extends BaseHayesPortHandlerTestCase<S
 	}
 	
 	public void testStandardRequestMatchingWithStateChange() {
-		fail("No tests written yet.");
+		HayesState registered = HayesState.createState("ERROR: 2",
+				"AT", "OK");
+		HayesState initial = HayesState.createState("ERROR: 1",
+				"AT", "OK",
+				"AT+CREG?", r("+CREG: 1", registered));
+		handler = new StatefulHayesPortHandler(initial);
+
+		assertResponse("AT", "OK", initial);
+		assertResponse("BAD_REQUEST", "ERROR: 1", initial);
+		assertResponse("AT+CREG?", "+CREG: 1", initial, registered);
+		assertResponse("BAD_REQUEST", "ERROR: 2", registered);
 	}
-	
+
 	public void testRegexRequestMatchingWithStateChange() {
-		fail("No tests written yet.");
+		HayesState pinSupplied = HayesState.createState("ERROR: 2",
+				"AT", "OK",
+				"AT+CPIN?", "OK");
+		HayesState pinRequired = HayesState.createState("ERROR: 1",
+				"AT", "OK",
+				"AT+CPIN?", "SIM PIN",
+				"AT+CPIN=1234", r("OK", pinSupplied),
+				p("AT\\+CPIN=.*"), "ERROR: BAD PIN");
+		handler = new StatefulHayesPortHandler(pinRequired);
+
+		assertResponse("BAD_REQUEST", "ERROR: 1", pinRequired);
+		assertResponse("AT+CPIN?", "SIM PIN", pinRequired);
+		assertResponse("AT+CPIN=0000", "ERROR: BAD PIN", pinRequired);
+		assertResponse("AT+CPIN=1234", "OK", pinRequired, pinSupplied);
+		assertResponse("BAD_REQUEST", "ERROR: 2", pinSupplied);
+		assertResponse("AT+CPIN?", "OK", pinSupplied);
 	}
 	
 	public void testStandardErrorRequestMatchingWithStateChange() {
@@ -62,8 +87,17 @@ public class StatefulHayesPortHandlerTest extends BaseHayesPortHandlerTestCase<S
 	}
 	
 	private void assertResponse(String request, String expectedResponse, HayesState expectedStateBeforeAndAfter) {
-		assertState(expectedStateBeforeAndAfter);
+		assertResponse(request, expectedResponse, expectedStateBeforeAndAfter, expectedStateBeforeAndAfter);
+	}
+	
+	private void assertResponse(String request, String expectedResponse, HayesState expectedStartState, HayesState expectedEndState) {
+		assertState(expectedStartState);
 		assertResponse(request, expectedResponse);
-		assertState(expectedStateBeforeAndAfter);
+		assertState(expectedEndState);
+	}
+
+//> STATIC HELPER METHODS
+	private static HayesResponse r(String response, HayesState newState) {
+		return new HayesResponse(response, newState);
 	}
 }
