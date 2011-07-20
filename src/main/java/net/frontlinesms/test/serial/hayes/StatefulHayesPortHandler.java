@@ -1,4 +1,4 @@
-package net.frontlinesms.test.serial;
+package net.frontlinesms.test.serial.hayes;
 
 public class StatefulHayesPortHandler extends BaseHayesPortHandler {
 	private HayesState currentState;

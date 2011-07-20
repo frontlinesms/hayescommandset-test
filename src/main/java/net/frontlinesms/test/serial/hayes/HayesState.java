@@ -1,4 +1,4 @@
-package net.frontlinesms.test.serial;
+package net.frontlinesms.test.serial.hayes;
 
 public class HayesState {
 	private final HayesResponse errorResponse;

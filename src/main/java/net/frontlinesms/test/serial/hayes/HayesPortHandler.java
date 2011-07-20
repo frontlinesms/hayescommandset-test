@@ -1,4 +1,4 @@
-package net.frontlinesms.test.serial;
+package net.frontlinesms.test.serial.hayes;
 
 /**
  * Simple Serial Port emulator for Hayes AT command set.  You must program the command

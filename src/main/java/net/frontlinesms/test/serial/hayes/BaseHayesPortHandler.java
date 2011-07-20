@@ -1,4 +1,4 @@
-package net.frontlinesms.test.serial;
+package net.frontlinesms.test.serial.hayes;
 
 import java.io.IOException;
 import java.io.InputStream;

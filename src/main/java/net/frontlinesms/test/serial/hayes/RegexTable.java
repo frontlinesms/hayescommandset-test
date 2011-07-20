@@ -1,4 +1,4 @@
-package net.frontlinesms.test.serial;
+package net.frontlinesms.test.serial.hayes;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

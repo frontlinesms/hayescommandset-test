@@ -1,8 +1,9 @@
-package net.frontlinesms.test.serial;
+package net.frontlinesms.test.serial.hayes;
 
 import java.util.regex.Pattern;
 
 import net.frontlinesms.junit.BaseTestCase;
+import net.frontlinesms.test.serial.hayes.BaseHayesPortHandler;
 
 public abstract class BaseHayesPortHandlerTestCase<T extends BaseHayesPortHandler> extends BaseTestCase {
 	/** Handler instance under test */

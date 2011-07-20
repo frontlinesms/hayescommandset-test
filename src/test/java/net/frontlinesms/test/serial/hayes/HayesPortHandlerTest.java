@@ -1,4 +1,6 @@
-package net.frontlinesms.test.serial;
+package net.frontlinesms.test.serial.hayes;
+
+import net.frontlinesms.test.serial.hayes.HayesPortHandler;
 
 /** unit tests for {@link HayesPortHandler} */
 public class HayesPortHandlerTest extends BaseHayesPortHandlerTestCase<HayesPortHandler> {
