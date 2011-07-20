@@ -73,12 +73,16 @@ public class StatefulHayesPortHandlerTest extends BaseHayesPortHandlerTestCase<S
 		assertResponse("AT+CPIN?", "OK", pinSupplied);
 	}
 	
-	public void testStandardErrorRequestMatchingWithStateChange() {
-		fail("No tests written yet.");
-	}
-	
-	public void testRegexErrorRequestMatchingWithStateChange() {
-		fail("No tests written yet.");
+	public void testErrorRequestMatchingWithStateChange() {
+		HayesState bad = HayesState.createState("+CMS ERROR: 999");
+		HayesState good = HayesState.createState(r("ERROR", bad),
+				"AT", "OK");
+		handler = new StatefulHayesPortHandler(good);
+
+		assertResponse("AT", "OK", good);
+		assertResponse("BAD_REQUEST", "ERROR", good, bad);
+		assertResponse("AT", "+CMS ERROR: 999", bad);
+		assertResponse("BAD_REQUEST", "+CMS ERROR: 999", bad);
 	}
 
 //> TEST HELPER METHODS
