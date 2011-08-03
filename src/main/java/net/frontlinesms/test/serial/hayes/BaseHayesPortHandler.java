@@ -8,7 +8,7 @@ import java.util.Queue;
 
 import serial.mock.SerialPortHandler;
 
-abstract class BaseHayesPortHandler implements SerialPortHandler {
+public abstract class BaseHayesPortHandler implements SerialPortHandler {
 	private final Queue<Character> responseQueue = new LinkedList<Character>(); 
 	private final StringBuilder currentRequest = new StringBuilder();
 
