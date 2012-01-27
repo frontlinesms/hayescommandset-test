@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.frontlinesms.test</groupId>
 	<artifactId>hayescommandset-test</artifactId>
-	<version>0.0.4</version>
+	<version>0.0.5-SNAPSHOT</version>
 	<name>Hayes Command Set serial test library</name>
 	<description>Library for testing applications using the Hayes (AT) command set to communicate with modems over serial connections.</description>
 	
