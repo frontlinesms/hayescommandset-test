@@ -120,13 +120,13 @@
 		<dependency>
 			<groupId>net.frontlinesms.test</groupId>
 			<artifactId>serial-test</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<version>0.0.2</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>net.frontlinesms</groupId>
+			<groupId>net.frontlinesms.test</groupId>
 			<artifactId>frontlinesms-test</artifactId>
-			<version>0.01.01</version>
+			<version>0.1.2</version>
 		</dependency>
 	</dependencies>
 </project>
