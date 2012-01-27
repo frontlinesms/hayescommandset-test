@@ -1,13 +1,13 @@
 package net.frontlinesms.test.serial.hayes;
 
-import net.frontlinesms.test.serial.hayes.HayesResponse;
+import net.frontlinesms.test.serial.hayes.SimpleHayesResponse;
 import net.frontlinesms.test.serial.hayes.HayesState;
 import net.frontlinesms.test.serial.hayes.StatefulHayesPortHandler;
 
 /** Unit tests for {@link StatefulHayesPortHandler} */
 public class StatefulHayesPortHandlerTest extends BaseHayesPortHandlerTestCase<StatefulHayesPortHandler> {	
 	public void testStandardRequestMatching() {
-		HayesState state = HayesState.createState("ERROR", 
+		HayesState state = SimpleHayesState.createState("ERROR", 
 				"AT", "OK");
 		handler = new StatefulHayesPortHandler(state);
 		
@@ -16,7 +16,7 @@ public class StatefulHayesPortHandlerTest extends BaseHayesPortHandlerTestCase<S
 	}
 
 	public void testRegexRequestMatching() {
-		HayesState state = HayesState.createState("ERROR", 
+		HayesState state = SimpleHayesState.createState("ERROR", 
 				p("AT\\+CMGS=\\d+"), "OK");
 		handler = new StatefulHayesPortHandler(state);
 		
@@ -24,7 +24,7 @@ public class StatefulHayesPortHandlerTest extends BaseHayesPortHandlerTestCase<S
 	}
 	
 	public void testRegexRequestMatchingWithMultiplePossibleMatchesA() {
-		HayesState state = HayesState.createState("ERROR",
+		HayesState state = SimpleHayesState.createState("ERROR",
 				p("AT\\+CMGS=\\d+"), "OK",
 				"AT+CMGS=112", "OMG!");
 		handler = new StatefulHayesPortHandler(state);
@@ -34,7 +34,7 @@ public class StatefulHayesPortHandlerTest extends BaseHayesPortHandlerTestCase<S
 	}
 	
 	public void testRegexRequestMatchingWithMultiplePossibleMatchesB() {
-		HayesState state = HayesState.createState("ERROR",
+		HayesState state = SimpleHayesState.createState("ERROR",
 				"AT+CMGS=112", "OMG!",
 				p("AT\\+CMGS=\\d+"), "OK");
 		handler = new StatefulHayesPortHandler(state);
@@ -45,9 +45,9 @@ public class StatefulHayesPortHandlerTest extends BaseHayesPortHandlerTestCase<S
 	}
 	
 	public void testStandardRequestMatchingWithStateChange() {
-		HayesState registered = HayesState.createState("ERROR: 2",
+		HayesState registered = SimpleHayesState.createState("ERROR: 2",
 				"AT", "OK");
-		HayesState initial = HayesState.createState("ERROR: 1",
+		HayesState initial = SimpleHayesState.createState("ERROR: 1",
 				"AT", "OK",
 				"AT+CREG?", r("+CREG: 1", registered));
 		handler = new StatefulHayesPortHandler(initial);
@@ -59,10 +59,10 @@ public class StatefulHayesPortHandlerTest extends BaseHayesPortHandlerTestCase<S
 	}
 
 	public void testRegexRequestMatchingWithStateChange() {
-		HayesState pinSupplied = HayesState.createState("ERROR: 2",
+		HayesState pinSupplied = SimpleHayesState.createState("ERROR: 2",
 				"AT", "OK",
 				"AT+CPIN?", "OK");
-		HayesState pinRequired = HayesState.createState("ERROR: 1",
+		HayesState pinRequired = SimpleHayesState.createState("ERROR: 1",
 				"AT", "OK",
 				"AT+CPIN?", "SIM PIN",
 				"AT+CPIN=1234", r("OK", pinSupplied),
@@ -78,8 +78,8 @@ public class StatefulHayesPortHandlerTest extends BaseHayesPortHandlerTestCase<S
 	}
 	
 	public void testErrorRequestMatchingWithStateChange() {
-		HayesState bad = HayesState.createState("+CMS ERROR: 999");
-		HayesState good = HayesState.createState(r("ERROR", bad),
+		HayesState bad = SimpleHayesState.createState("+CMS ERROR: 999");
+		HayesState good = SimpleHayesState.createState(r("ERROR", bad),
 				"AT", "OK");
 		handler = new StatefulHayesPortHandler(good);
 
@@ -105,7 +105,7 @@ public class StatefulHayesPortHandlerTest extends BaseHayesPortHandlerTestCase<S
 	}
 
 //> STATIC HELPER METHODS
-	private static HayesResponse r(String response, HayesState newState) {
-		return new HayesResponse(response, newState);
+	private static SimpleHayesResponse r(String response, HayesState newState) {
+		return new SimpleHayesResponse(response, newState);
 	}
 }
